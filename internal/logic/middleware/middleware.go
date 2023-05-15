@@ -12,7 +12,3 @@ var Middleware = sMiddleware{}
 func init() {
 	service.RegisterMiddleware(New())
 }
-
-func New() *sMiddleware {
-	return &sMiddleware{}
-}

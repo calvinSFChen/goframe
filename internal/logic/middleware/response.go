@@ -21,10 +21,12 @@ func (m *sMiddleware) HandlerResponse(r *ghttp.Request) {
 		data = r.GetHandlerResponse()
 		code = gerror.Code(err)
 	)
-	if err != nil {
+	if err != nil && code.Code() != 2001 {
 		// 没有指定错误码
 		if code == gcode.CodeNil {
-			code = gcode.WithCode(cerrors.CodeNil, nil)
+			code = gcode.New(cerrors.CodeNil.Code(), err.Error(), code.Detail())
+		} else {
+			code = gcode.New(code.Code(), err.Error(), code.Detail())
 		}
 	} else {
 		if r.Response.Status > 0 && r.Response.Status != http.StatusOK {
@@ -39,7 +41,11 @@ func (m *sMiddleware) HandlerResponse(r *ghttp.Request) {
 			}
 			code = gcode.New(code.Code(), msg, code.Detail())
 		} else {
-			code = gcode.WithCode(cerrors.CodeSuccess, nil)
+			if err == nil {
+				code = gcode.WithCode(cerrors.CodeSuccess, code.Detail())
+			} else {
+				code = gcode.New(cerrors.CodeSuccess.Code(), err.Error(), code.Detail())
+			}
 		}
 	}
 	// 非成功状态，不返回数据

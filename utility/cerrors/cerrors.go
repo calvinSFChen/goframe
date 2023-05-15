@@ -40,8 +40,10 @@ func New(httpCode int, code string, message string) gcode.Code {
 }
 
 var (
-	CodeNil      = New(201, "", "操作失败")
-	CodeSuccess  = New(200, "", "操作成功")
-	CodeNotFound = New(404, "Not Found", "Resource does not exist")
-	CodeInternal = New(500, "Internal Error", "An error occurred internally")
+	CodeSuccessNil = New(2001, "", "")
+	CodeNil        = New(201, "", "操作失败")
+	CodeSuccess    = New(200, "", "操作成功")
+	CodeNotFound   = New(404, "Not Found", "Resource does not exist")
+	CodeInternal   = New(500, "Internal Error", "An error occurred internally")
+	CodeExpire     = New(499, "Internal Error", "登录已过期")
 )

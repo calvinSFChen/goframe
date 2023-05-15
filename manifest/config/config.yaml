@@ -1,15 +1,21 @@
 server:
-  address:     ":8000"
+  address:     "8100,8200"
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
 
 logger:
   level : "all"
-  stdout: true
+  stdout: false
 
 database:
   default:
-    link: "mysql:root:123456@tcp(127.0.0.1:3306)/my_test"
+    link: "mysql:root:123456@tcp(127.0.0.1:3306)/myshop"
+    debug: false
 
+redis:
+  # 单实例配置示例1
+  default:
+    address: 127.0.0.1:6379
+    db:      0
 
 

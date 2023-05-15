@@ -5,5 +5,9 @@
 package logic
 
 import (
+	_ "goframe/internal/logic/auth"
+	_ "goframe/internal/logic/bizctx"
 	_ "goframe/internal/logic/middleware"
+	_ "goframe/internal/logic/route"
+	_ "goframe/internal/logic/setting"
 )

@@ -9,9 +9,11 @@ import (
 type cIndex struct {
 }
 
-var Index = cIndex{}
+func NewIndex() *cIndex {
+	return &cIndex{}
+}
 
-func (c *cIndex) Index(ctx *context.Context, req *v1.Req) (res *v1.Res, err error) {
+func (c *cIndex) Index(ctx context.Context, req *v1.IndexReq) (res *v1.IndexRes, err error) {
 	fmt.Println("this is index")
 	return
 }
