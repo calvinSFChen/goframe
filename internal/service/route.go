@@ -6,14 +6,14 @@
 package service
 
 import (
-	"goframe/internal/model/setting"
+	"goframe/internal/model/system"
 
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
 type (
 	IRoute interface {
-		AddRoute(routes ...setting.RouteItem)
+		AddRoute(routes ...system.RouteItem)
 		InitModule(module string, isBool bool)
 		Middleware(group *ghttp.RouterGroup, isAuth bool, isReset bool)
 	}

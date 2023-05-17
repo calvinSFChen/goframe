@@ -17,7 +17,7 @@ func Encryption(s string) (str string, err error) {
 
 // EncryptionVerify 对比密码
 func EncryptionVerify(pwd1 string, pwd2 string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(pwd1), []byte(pwd2))
+	err := bcrypt.CompareHashAndPassword([]byte(pwd2), []byte(pwd1))
 	if err != nil {
 		return true
 	} else {

@@ -5,7 +5,7 @@ gfcli:
   # dao生成
   gen:
     dao:
-      - link: "mysql:root:123456@tcp(127.0.0.1:3306)/myshop"
-        removePrefix: "my_"
+      - link: "mysql:root:123456@tcp(8.134.148.139:3306)/test"
+        removePrefix: "test_"
         descriptionTag: true
         noModelComment: true

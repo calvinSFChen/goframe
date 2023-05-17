@@ -3,17 +3,21 @@ package auth
 import (
 	"context"
 	"fmt"
+
 	jwt "github.com/gogf/gf-jwt/v2"
-	"github.com/gogf/gf/v2/errors/gcode"
-	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/frame/g"
-	"goframe/api/v1/backend/setting/rabc"
+
+	// "github.com/gogf/gf/v2/errors/gcode"
+	"goframe/api/v1/backend/system/auths"
 	"goframe/internal/dao"
 	"goframe/internal/model/entity"
 	"goframe/utility/cerrors"
 	"goframe/utility/response"
 	"goframe/utility/utils"
 	"time"
+
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/text/gstr"
 )
 
 type sAuth struct {
@@ -83,10 +87,10 @@ func IdentityHandler(ctx context.Context) interface{} {
 
 // LoginUnauthorized 验证不通过
 func LoginUnauthorized(ctx context.Context, code int, message string) {
-	fmt.Println("验证不通过")
+	fmt.Println("验证不通过",code,  message)
 	r := g.RequestFromCtx(ctx)
-	codes := gcode.WithCode(cerrors.CodeExpire, nil)
-	response.JsonExit(r, codes.Code(), codes.Message(), nil)
+	// codes := gerror.NewCode(cerrors.CodeExpire, message)
+	response.JsonExit(r, code, message, nil)
 	r.ExitAll()
 }
 
@@ -95,26 +99,25 @@ func LoginAuthenticator(ctx context.Context) (interface{}, error) {
 	fmt.Println("登录验证")
 	var (
 		r     = g.RequestFromCtx(ctx)
-		input rabc.AdminLoginReq
+		input auths.AdminLoginReq
 
-		rabcAdmin entity.MuRabcAdmin
+		systemAdmin entity.SystemAdmin
 	)
 	err := r.Parse(&input)
 	if err != nil {
-		return nil, gerror.New(utils.T(ctx, "参数异常"))
+		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "参数异常"))
 	}
 
-	err = dao.MuRabcAdmin.Ctx(ctx).
+	password := gstr.Trim(input.Password)
+	err = dao.SystemAdmin.Ctx(ctx).
 		WhereOr("username=?", input.Username).
-		WhereOr("phone=?", input.Username).
-		WhereOr("email=?", input.Username).Scan(&rabcAdmin)
+		WhereOr("phone=?", input.Username).Scan(&systemAdmin)
 	if err != nil {
-		return nil, err
+		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
+	}
+	if !utils.EncryptionVerify(systemAdmin.Password, password) {
+		return nil, gerror.NewCode(cerrors.CodeExpire,utils.T(ctx, "账号或密码有误"))
 	}
 
-	if !utils.EncryptionVerify(rabcAdmin.Password, input.Password) {
-		return nil, gerror.New(utils.T(ctx, "账号或密码有误"))
-	}
-
-	return utils.StructToMap(rabcAdmin), nil
+	return utils.StructToMap(systemAdmin), nil
 }

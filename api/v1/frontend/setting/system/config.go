@@ -2,7 +2,7 @@ package system
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
-	"goframe/internal/model/setting"
+	"goframe/internal/model/system"
 )
 
 type BasicConfigListReq struct {
@@ -15,5 +15,5 @@ type BasicConfigListReq struct {
 type BasicConfigListRes struct {
 	g.Meta `mime:"application/json" tags:"系统配置管理" example:"string"`
 	Total  int                       `json:"total" description:"总条数"`
-	List   []setting.SystemConfigRes `json:"list" description:"列表数据"`
+	List   []system.SystemConfigRes `json:"list" description:"列表数据"`
 }

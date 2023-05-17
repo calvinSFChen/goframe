@@ -1,5 +1,5 @@
 server:
-  address:     "8100,8200"
+  address:     "8200"
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
 
@@ -9,7 +9,8 @@ logger:
 
 database:
   default:
-    link: "mysql:root:123456@tcp(127.0.0.1:3306)/myshop"
+    link: "mysql:root:123456@tcp(8.134.148.139:3306)/test"
+    prefix: "test_"
     debug: false
 
 redis:

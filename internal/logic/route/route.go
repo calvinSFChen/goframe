@@ -8,7 +8,7 @@ import (
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/gconv"
 	"goframe/internal/consts"
-	"goframe/internal/model/setting"
+	"goframe/internal/model/system"
 	"goframe/utility/redis"
 )
 
@@ -22,13 +22,13 @@ type sRoute struct {
 var (
 	commonRouteKey = "common_routes"
 	routesKey      = "routes"
-	routeArray     []setting.RouteItem
+	routeArray     []system.RouteItem
 	modules        = garray.NewStrArray(true)
 	moduleArr      = garray.NewStrArray(true)
 	moduleDefault  string
 )
 
-func (s *sRoute) AddRoute(routes ...setting.RouteItem) {
+func (s *sRoute) AddRoute(routes ...system.RouteItem) {
 
 	for _, v := range routes {
 		routeArray = append(routeArray, v)

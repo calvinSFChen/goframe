@@ -9,5 +9,5 @@ import (
 	_ "goframe/internal/logic/bizctx"
 	_ "goframe/internal/logic/middleware"
 	_ "goframe/internal/logic/route"
-	_ "goframe/internal/logic/setting"
+	_ "goframe/internal/logic/system"
 )
