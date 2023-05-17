@@ -3,7 +3,7 @@ package system
 import (
 	"context"
 	"fmt"
-	"goframe/api/v1/frontend/setting/system"
+	"goframe/api/v1/frontend/system"
 )
 
 type cConfig struct {

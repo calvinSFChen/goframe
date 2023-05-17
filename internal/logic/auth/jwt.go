@@ -87,7 +87,7 @@ func IdentityHandler(ctx context.Context) interface{} {
 
 // LoginUnauthorized 验证不通过
 func LoginUnauthorized(ctx context.Context, code int, message string) {
-	fmt.Println("验证不通过",code,  message)
+	fmt.Println("验证不通过", code, message)
 	r := g.RequestFromCtx(ctx)
 	// codes := gerror.NewCode(cerrors.CodeExpire, message)
 	response.JsonExit(r, code, message, nil)
@@ -109,6 +109,8 @@ func LoginAuthenticator(ctx context.Context) (interface{}, error) {
 	}
 
 	password := gstr.Trim(input.Password)
+	// p, _ := utils.Encryption(password)
+	// fmt.Printf("密码加密： %v\n", p)
 	err = dao.SystemAdmin.Ctx(ctx).
 		WhereOr("username=?", input.Username).
 		WhereOr("phone=?", input.Username).Scan(&systemAdmin)
@@ -116,7 +118,7 @@ func LoginAuthenticator(ctx context.Context) (interface{}, error) {
 		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
 	}
 	if !utils.EncryptionVerify(systemAdmin.Password, password) {
-		return nil, gerror.NewCode(cerrors.CodeExpire,utils.T(ctx, "账号或密码有误"))
+		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
 	}
 
 	return utils.StructToMap(systemAdmin), nil

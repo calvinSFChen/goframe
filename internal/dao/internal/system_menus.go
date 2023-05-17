@@ -25,7 +25,8 @@ type SystemMenusColumns struct {
 	Icon       string // 图标
 	Title      string // 名称
 	Sort       string // 排序
-	IsShow     string // 是否为隐藏菜单0=隐藏菜单,1=显示菜单
+	IsShow     string // 0隐藏1显示
+	Status     string // 0关闭1开启
 	Access     string // 子管理员是否可用
 	Path       string // 路径
 	UniqueAuth string // 前台唯一标识
@@ -43,6 +44,7 @@ var systemMenusColumns = SystemMenusColumns{
 	Title:      "title",
 	Sort:       "sort",
 	IsShow:     "is_show",
+	Status:     "status",
 	Access:     "access",
 	Path:       "path",
 	UniqueAuth: "unique_auth",

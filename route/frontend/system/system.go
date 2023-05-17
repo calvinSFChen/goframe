@@ -1,10 +1,8 @@
 package system
 
-import (
-	// "goframe/internal/controller/frontend/system"
-	// "goframe/internal/model/system"
-	// "goframe/internal/service"
-)
+// "goframe/internal/controller/frontend/system"
+// "goframe/internal/model/system"
+// "goframe/internal/service"
 
 func init() {
 

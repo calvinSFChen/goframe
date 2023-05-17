@@ -9,16 +9,18 @@ import (
 func init() {
 	service.Route().AddRoute(
 		// admin 管理员
-	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.Add},
-	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.Edit},
-	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.List},
-	system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewAdmin.Login},
-	system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewAdmin.Logout},
+		// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.Add},
+		// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.Edit},
+		// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.List},
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewAdmin.Login},
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewAdmin.Logout},
 
-	// 	// menu 菜单管理
-	system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewMenu.Add},
-		// setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewMenu.Edit},
-		// setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewMenu.List},
+		// 	// menu 菜单管理
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.Add},
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.Edit},
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.TreeList},
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.UniqueAuthList},
+		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.List},
 
 	// 	// route 路由管理
 	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewRoute.Add},

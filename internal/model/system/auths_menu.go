@@ -14,3 +14,9 @@ type MenuListItemEntity struct {
 	Header     int    `json:"header"     description:"是否隐藏菜单 0隐藏 1显示"`
 	IsHeader   string `json:"is_header"       description:"路径"`
 }
+
+type MenuTreeListItem struct {
+	Label    string             `json:"label" description:"标题"`
+	Value    string             `json:"value" description:"值"`
+	Children []MenuTreeListItem `json:"children" description:"子项"`
+}

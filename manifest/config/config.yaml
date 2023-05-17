@@ -11,7 +11,7 @@ database:
   default:
     link: "mysql:root:123456@tcp(8.134.148.139:3306)/test"
     prefix: "test_"
-    debug: false
+    debug: true
 
 redis:
   # 单实例配置示例1

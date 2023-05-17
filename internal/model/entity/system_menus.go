@@ -15,7 +15,8 @@ type SystemMenus struct {
 	Icon       string      `json:"icon"       description:"图标"`
 	Title      string      `json:"title"      description:"名称"`
 	Sort       int         `json:"sort"       description:"排序"`
-	IsShow     uint        `json:"isShow"     description:"是否为隐藏菜单0=隐藏菜单,1=显示菜单"`
+	IsShow     uint        `json:"isShow"     description:"0隐藏1显示"`
+	Status     uint        `json:"status"     description:"0关闭1开启"`
 	Access     uint        `json:"access"     description:"子管理员是否可用"`
 	Path       string      `json:"path"       description:"路径"`
 	UniqueAuth string      `json:"uniqueAuth" description:"前台唯一标识"`

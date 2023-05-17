@@ -8,6 +8,7 @@ package service
 import (
 	"context"
 	"goframe/api/v1/backend/system/auths"
+	"goframe/internal/model/system"
 )
 
 type (
@@ -16,13 +17,21 @@ type (
 		Logout(ctx context.Context) (err error)
 	}
 	IAuthsMenu interface {
+		List(ctx context.Context, input *auths.MenuListReq) (out auths.MenuListRes, err error)
+		GetMenuItem(ctx context.Context, list []system.MenuListItem) (res []system.MenuListItem)
 		Add(ctx context.Context, req *auths.MenuAddReq) (err error)
+		Edit(ctx context.Context, req *auths.MenuEditReq) (err error)
+		UniqueAuthList(ctx context.Context, input *auths.MenuUniqueAuthListReq) (out []string, err error)
+		TreeList(ctx context.Context, req *auths.MenuTreeListReq) (out []system.MenuTreeListItem, err error)
+		TreeListItem(ctx context.Context, list []system.MenuTreeListItem) (out []system.MenuTreeListItem, err error)
 	}
+	IAuthsRoute interface{}
 )
 
 var (
-	localAuthsMenu  IAuthsMenu
 	localAuthsAdmin IAuthsAdmin
+	localAuthsMenu  IAuthsMenu
+	localAuthsRoute IAuthsRoute
 )
 
 func AuthsAdmin() IAuthsAdmin {
@@ -45,4 +54,15 @@ func AuthsMenu() IAuthsMenu {
 
 func RegisterAuthsMenu(i IAuthsMenu) {
 	localAuthsMenu = i
+}
+
+func AuthsRoute() IAuthsRoute {
+	if localAuthsRoute == nil {
+		panic("implement not found for interface IAuthsRoute, forgot register?")
+	}
+	return localAuthsRoute
+}
+
+func RegisterAuthsRoute(i IAuthsRoute) {
+	localAuthsRoute = i
 }
