@@ -6,7 +6,7 @@ import (
 
 func init() {
 	// service.RegisterSystemConfig(NewSystemConfig()) // 系统配置
-	service.RegisterAuthsAdmin(NewAuthsAdmin())       // 管理员
-	service.RegisterAuthsMenu(NewAuthsMenu())         // 菜单
-	// service.RegisterAuthsRoute(NewAuthsRoute())       // 路由
+	service.RegisterAuthsAdmin(NewAuthsAdmin()) // 管理员
+	service.RegisterAuthsMenu(NewAuthsMenu())   // 菜单
+	service.RegisterAuthsRoute(NewAuthsRoute()) // 路由
 }

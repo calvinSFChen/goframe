@@ -1,14 +1,18 @@
 package system
 
-// import (
-// 	"context"
-// 	"github.com/gogf/gf/v2/errors/gerror"
-// 	"github.com/gogf/gf/v2/text/gstr"
-// 	"goframe/api/v1/backend/setting/rabc"
-// 	"goframe/internal/dao"
-// 	"goframe/internal/model/entity"
-// 	"goframe/utility/utils"
-// )
+import (
+	"context"
+	"fmt"
+	"goframe/api/v1/backend/system/auths"
+	"goframe/internal/dao"
+	"goframe/internal/model/entity"
+	"goframe/internal/model/system"
+	"goframe/utility/utils"
+
+	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/text/gstr"
+)
 
 type sAuthsRoute struct {
 }
@@ -18,103 +22,140 @@ func NewAuthsRoute() *sAuthsRoute {
 }
 
 // // List 管理员列表
-// func (s *sRabcRoute) List(ctx context.Context, input *rabc.RouteListReq) (total int, out []entity.MuRabcRoute, err error) {
-// 	var (
-// 		page     = input.Page
-// 		pageSize = input.PageSize
-// 		name     = input.Name
-// 		status   = input.Status
-// 	)
+func (s *sAuthsRoute) List(ctx context.Context, input *auths.RouteListReq) (total int, out []system.SystemRouteOut, err error) {
+	var (
+		page     = input.Page
+		pageSize = input.PageSize
+	)
 
-// 	model := dao.MuRabcRoute.Ctx(ctx).Safe(false)
-// 	if name != "" {
-// 		model.Where("name=?", name)
-// 	}
-// 	if status != -1 {
-// 		model.Where("status=?", status)
-// 	}
+	model := s.Query(ctx, input)
+	if total, err = model.Count(); err != nil {
+		return
+	}
+	model.Page(page, (page-1)*pageSize)
+	if err = model.Scan(&out); err != nil {
+		return
+	}
+	return
+}
 
-// 	if total, err = model.Count(); err != nil {
-// 		return
-// 	}
-// 	model.Page(page, (page-1)*pageSize)
-// 	if err = model.Scan(&out); err != nil {
-// 		return
-// 	}
-// 	return
-// }
+func (s *sAuthsRoute) Query(ctx context.Context, input *auths.RouteListReq) *gdb.Model {
+	var (
+		title  = input.Title
+		status = input.Status
+		pid    = input.Pid
+	)
 
-// // Add 添加
-// func (s *sRabcRoute) Add(ctx context.Context, req *rabc.RouteAddReq) (err error) {
-// 	var (
-// 		menuId = req.MenuId
-// 		method = gstr.Trim(req.Method)
-// 		name   = gstr.Trim(req.Name)
-// 		path   = gstr.Trim(req.Path)
-// 		sort   = req.Sort
-// 		status = req.Status
+	model := dao.SystemRoute.Ctx(ctx).Safe(false)
+	if title != "" {
+		model.Where("title like ?", fmt.Sprintf("%%%s%%", title))
+	}
+	if status != -1 {
+		model.Where("status = ?", status)
+	}
 
-// 		rabcRoute entity.MuRabcRoute
-// 	)
+	if pid > 0 {
+		model.Where("pid = ?", pid)
+	}
 
-// 	var exitMenuId int
-// 	exitMenuId, err = dao.MuRabcMenus.Ctx(ctx).Where(dao.MuRabcMenus.Columns().Id, menuId).Count()
-// 	if err != nil {
-// 		return
-// 	}
-// 	if exitMenuId <= 0 {
-// 		err = gerror.New(utils.T(ctx, "菜单分类不存在"))
-// 		return
-// 	}
-// 	rabcRoute.Name = name
-// 	rabcRoute.MenuId = uint(menuId)
-// 	rabcRoute.Method = method
-// 	rabcRoute.Path = path
-// 	rabcRoute.Sort = int(sort)
-// 	rabcRoute.Status = int(status)
-// 	var lastId int64
-// 	lastId, err = dao.MuRabcRoute.Ctx(ctx).Data(rabcRoute).InsertAndGetId()
-// 	if err != nil {
-// 		return
-// 	}
-// 	if lastId <= 0 {
-// 		err = gerror.New(utils.T(ctx, "操作失败"))
-// 		return
-// 	}
-// 	return
-// }
+	return model
+}
 
-// // Edit 编辑管理员
-// func (s *sRabcRoute) Edit(ctx context.Context, req *rabc.RouteEditReq) (err error) {
-// 	var (
-// 		id     = req.Id
-// 		menuId = req.MenuId
-// 		method = gstr.Trim(req.Method)
-// 		name   = gstr.Trim(req.Name)
-// 		path   = gstr.Trim(req.Path)
-// 		sort   = req.Sort
-// 		status = req.Status
+// Add 添加
+func (s *sAuthsRoute) Add(ctx context.Context, req *auths.RouteAddReq) (err error) {
+	var (
+		pid        = req.Pid
+		title      = gstr.Trim(req.Title)
+		methods    = gstr.Trim(req.Methods)
+		path       = gstr.Trim(req.Path)
+		uniqueAuth = gstr.Trim(req.UniqueAuth)
+		sort       = req.Sort
+		status     = req.Status
 
-// 		rabcRoute entity.MuRabcRoute
-// 	)
+		systemRoute entity.SystemRoute
+	)
 
-// 	if id <= 0 {
-// 		err = gerror.New(utils.T(ctx, "参数异常"))
-// 		return
-// 	}
-// 	err = dao.MuRabcRoute.Ctx(ctx).Where("id=?", id).Scan(&rabcRoute)
-// 	if err != nil {
-// 		return
-// 	}
-// 	rabcRoute.Name = name
-// 	rabcRoute.MenuId = uint(menuId)
-// 	rabcRoute.Method = method
-// 	rabcRoute.Path = path
-// 	rabcRoute.Sort = int(sort)
-// 	rabcRoute.Status = int(status)
-// 	_, err = dao.MuRabcRoute.Ctx(ctx).Data(rabcRoute).Where("id=?", id).Update()
-// 	if err != nil {
-// 		return
-// 	}
-// 	return
-// }
+	var menuCount int
+	menuCount, err = dao.SystemMenus.Ctx(ctx).Where("pid=?", pid).Count()
+	if err != nil {
+		return
+	}
+
+	if menuCount <= 0 {
+		err = gerror.New(utils.T(ctx, "父级分类不存在"))
+		return
+	}
+
+	systemRoute.Title = title
+	systemRoute.Pid = uint(pid)
+	systemRoute.Methods = methods
+	systemRoute.Path = path
+	systemRoute.UniqueAuth = uniqueAuth
+	systemRoute.Sort = int(sort)
+	systemRoute.Status = uint(status)
+	systemRoute.Operator = utils.GetUserName()
+	var lastId int64
+	lastId, err = dao.SystemRoute.Ctx(ctx).Data(systemRoute).InsertAndGetId()
+	if err != nil {
+		return
+	}
+	if lastId <= 0 {
+		err = gerror.New(utils.T(ctx, "操作失败"))
+		return
+	}
+	return
+}
+
+// Edit 编辑
+func (s *sAuthsRoute) Edit(ctx context.Context, input *auths.RouteEditReq) (err error) {
+	var (
+		id         = input.Id
+		pid        = input.Pid
+		title      = gstr.Trim(input.Title)
+		methods    = gstr.Trim(input.Methods)
+		path       = gstr.Trim(input.Path)
+		uniqueAuth = gstr.Trim(input.UniqueAuth)
+		sort       = input.Sort
+		status     = input.Status
+
+		systemRoute entity.SystemRoute
+	)
+	fmt.Printf("input: %+v\n", input)
+	var menuCount int
+	menuCount, err = dao.SystemMenus.Ctx(ctx).Where("pid=?", pid).Count()
+	if err != nil {
+		return
+	}
+
+	if menuCount <= 0 {
+		err = gerror.New(utils.T(ctx, "父级分类不存在"))
+		return
+	}
+
+	err = dao.SystemRoute.Ctx(ctx).Where(id).Scan(&systemRoute)
+	if err != nil {
+		err = gerror.New(utils.T(ctx, "数据不存在"))
+		return
+	}
+
+	fmt.Printf("systemRoute: %+v\n", systemRoute)
+
+	systemRoute.Title = title
+	systemRoute.Pid = uint(pid)
+	systemRoute.Methods = methods
+	systemRoute.Path = path
+	systemRoute.UniqueAuth = uniqueAuth
+	systemRoute.Sort = int(sort)
+	systemRoute.Status = uint(status)
+	systemRoute.Operator = utils.GetUserName()
+	var affected int64
+	affected, err = dao.SystemRoute.Ctx(ctx).FieldsEx("id").Data(systemRoute).Where(id).UpdateAndGetAffected()
+	if err != nil {
+		return
+	}
+	if affected <= 0 {
+		err = gerror.New(utils.T(ctx, "操作失败"))
+		return
+	}
+	return
+}

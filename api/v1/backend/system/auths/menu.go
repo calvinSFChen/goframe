@@ -16,7 +16,7 @@ type MenuListReq struct {
 type MenuListRes struct {
 	g.Meta `mime:"application/json" tags:"菜单管理" example:"string"`
 	List   []system.MenuListItem `json:"list" description:"列表数据"`
-	Total  int                   `json:"total" description: "总条数"`
+	Total  int                   `json:"total" description:"总条数"`
 }
 
 type MenuAddReq struct {
@@ -36,7 +36,7 @@ type MenuAddRes struct {
 
 type MenuEditReq struct {
 	g.Meta     `path:"auths_menu/edit"  tags:"菜单管理" method:"post" description:"编辑菜单"`
-	Id         uint   `json:"id" v:"id@required   #参数异常" description:"ID"`
+	Id        uint   `json:"id" v:"id@required   #缺少ID" description:"ID"`
 	Title      string `json:"title" v:"title@required   #名称不能为空" description:"名称"`
 	Pid        uint64 `json:"pid" description:"父类id"`
 	Path       string `json:"path" v:"path@required #路径不为空" description:"路径"`

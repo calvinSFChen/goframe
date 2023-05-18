@@ -14,9 +14,11 @@ type SystemAdmin struct {
 	g.Meta     `orm:"table:test_system_admin, do:true"`
 	Id         interface{} // ID
 	Username   interface{} // 后台管理员账号
+	Realname   interface{} // 后台管理员姓名
+	Email      interface{} // 邮箱
+	Phone      interface{} // 手机号码
 	HeadPic    interface{} // 管理员头像
 	Password   interface{} // 后台管理员密码
-	RealName   interface{} // 后台管理员姓名
 	Roles      interface{} // 后台管理员权限
 	LastIp     interface{} // 后台管理员最后一次登录ip
 	LastTime   interface{} // 后台管理员最后一次登录时间
@@ -24,9 +26,8 @@ type SystemAdmin struct {
 	Level      interface{} // 后台管理员级别
 	Status     interface{} // 后台管理员状态 1有效0无效
 	DivisionId interface{} // 事业部id
+	Operator   interface{} // 操作人
 	IsDel      interface{} // 是否删除
 	CreatedAt  *gtime.Time // 创建时间
 	UpdatedAt  *gtime.Time // 更新时间
-	Operator   interface{} // 操作人
-	Phone      interface{} // 手机号码
 }

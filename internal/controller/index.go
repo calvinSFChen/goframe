@@ -3,7 +3,7 @@ package controller
 import (
 	"context"
 	"fmt"
-	"goframe/api/v1"
+	v1 "goframe/api/v1"
 )
 
 type cIndex struct {
@@ -14,6 +14,6 @@ func NewIndex() *cIndex {
 }
 
 func (c *cIndex) Index(ctx context.Context, req *v1.IndexReq) (res *v1.IndexRes, err error) {
-	fmt.Println("this is index")
+	fmt.Printf("this is index, req: %+v\n", req)
 	return
 }

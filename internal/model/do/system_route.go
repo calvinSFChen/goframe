@@ -19,9 +19,9 @@ type SystemRoute struct {
 	Access     interface{} // 子管理员是否可用
 	Path       interface{} // 路径
 	UniqueAuth interface{} // 前台唯一标识
-	IsShow     interface{} // 0关闭1开启
-	IsDel      interface{} // 是否删除
+	Status     interface{} // 0关闭1开启
+	Sort       interface{} // 排序
+	Operator   interface{} // 操作人
 	CreatedAt  *gtime.Time // 创建时间
 	UpdatedAt  *gtime.Time // 更新时间
-	Operator   interface{} // 操作人
 }

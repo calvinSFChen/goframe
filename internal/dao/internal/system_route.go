@@ -27,11 +27,11 @@ type SystemRouteColumns struct {
 	Access     string // 子管理员是否可用
 	Path       string // 路径
 	UniqueAuth string // 前台唯一标识
-	IsShow     string // 0关闭1开启
-	IsDel      string // 是否删除
+	Status     string // 0关闭1开启
+	Sort       string // 排序
+	Operator   string // 操作人
 	CreatedAt  string // 创建时间
 	UpdatedAt  string // 更新时间
-	Operator   string // 操作人
 }
 
 // systemRouteColumns holds the columns for table test_system_route.
@@ -43,11 +43,11 @@ var systemRouteColumns = SystemRouteColumns{
 	Access:     "access",
 	Path:       "path",
 	UniqueAuth: "unique_auth",
-	IsShow:     "is_show",
-	IsDel:      "is_del",
+	Status:     "status",
+	Sort:       "sort",
+	Operator:   "operator",
 	CreatedAt:  "created_at",
 	UpdatedAt:  "updated_at",
-	Operator:   "operator",
 }
 
 // NewSystemRouteDao creates and returns a new DAO object for table data access.

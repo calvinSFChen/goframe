@@ -15,6 +15,7 @@ import (
 	"goframe/utility/utils"
 	"time"
 
+	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/text/gstr"
@@ -82,15 +83,27 @@ func PayloadFunc(data interface{}) jwt.MapClaims {
 // IdentityHandler 标识
 func IdentityHandler(ctx context.Context) interface{} {
 	claims := jwt.ExtractClaims(ctx)
+	fmt.Printf("IdentityHandler: %+v\n", claims)
+
 	return claims[AuthsService.AuthJwt.IdentityKey]
 }
 
 // LoginUnauthorized 验证不通过
 func LoginUnauthorized(ctx context.Context, code int, message string) {
-	fmt.Println("验证不通过", code, message)
+	var (
+		codes gcode.Code
+	)
+	fmt.Printf("LoginUnauthorized: %+v\n", code)
+
 	r := g.RequestFromCtx(ctx)
-	// codes := gerror.NewCode(cerrors.CodeExpire, message)
-	response.JsonExit(r, code, message, nil)
+	url := r.Router.Uri
+	if url == "/backend/system/auths_admin/login" {
+		codes = cerrors.CodeNil
+	} else {
+		codes = cerrors.CodeExpire
+		message = codes.Message()
+	}
+	response.JsonExit(r, codes.Code(), message, nil)
 	r.ExitAll()
 }
 
@@ -113,10 +126,12 @@ func LoginAuthenticator(ctx context.Context) (interface{}, error) {
 	// fmt.Printf("密码加密： %v\n", p)
 	err = dao.SystemAdmin.Ctx(ctx).
 		WhereOr("username=?", input.Username).
+		WhereOr("email=?", input.Username).
 		WhereOr("phone=?", input.Username).Scan(&systemAdmin)
 	if err != nil {
 		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
 	}
+	fmt.Printf("OldPassword: %v; input: %+v\n", utils.Encryption(password), input)
 	if !utils.EncryptionVerify(systemAdmin.Password, password) {
 		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
 	}

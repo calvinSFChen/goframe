@@ -9,22 +9,22 @@ import (
 func init() {
 	service.Route().AddRoute(
 		// admin 管理员
-		// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.Add},
-		// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.Edit},
-		// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewAdmin.List},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewAdmin.Add},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewAdmin.Edit},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewAdmin.List},
 		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewAdmin.Login},
 		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewAdmin.Logout},
 
 		// 	// menu 菜单管理
-		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.Add},
-		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.Edit},
-		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.TreeList},
-		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.UniqueAuthList},
-		system.RouteItem{Module: Module, IsAuth: false, Func: auths.NewMenu.List},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewMenu.Add},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewMenu.Edit},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewMenu.TreeList},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewMenu.UniqueAuthList},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewMenu.List},
 
-	// 	// route 路由管理
-	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewRoute.Add},
-	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewRoute.Edit},
-	// 	setting.RouteItem{Module: Module, IsAuth: true, Func: auth.NewRoute.List},
+		// route 路由管理
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewRoute.Add},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewRoute.Edit},
+		system.RouteItem{Module: Module, IsAuth: true, Func: auths.NewRoute.List},
 	)
 }

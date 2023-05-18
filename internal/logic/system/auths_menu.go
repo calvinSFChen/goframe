@@ -139,12 +139,14 @@ func (s *sAuthsMenu) Edit(ctx context.Context, req *auths.MenuEditReq) (err erro
 	//if err = ghtml.SpecialCharsMapOrStruct(req); err != nil {
 	//	return
 	//}
-	err = dao.SystemMenus.Ctx(ctx).Where("id=", id).Scan(&systemMenu)
-	if err != nil {
+	fmt.Printf("menu: %+v\n", req)
+	if id <= 0 {
+		err = gerror.New(utils.T(ctx, "参数异常"))
 		return
 	}
-	if id <= 0 {
-		gerror.New(utils.T(ctx, "参数异常"))
+	err = dao.SystemMenus.Ctx(ctx).Where("id=", id).Scan(&systemMenu)
+	if err != nil {
+		err = gerror.New(utils.T(ctx, "参数异常"))
 		return
 	}
 	if pid != 0 {

@@ -9,10 +9,17 @@ import (
 	"context"
 	"goframe/api/v1/backend/system/auths"
 	"goframe/internal/model/system"
+
+	"github.com/gogf/gf/v2/database/gdb"
 )
 
 type (
 	IAuthsAdmin interface {
+		List(ctx context.Context, input *auths.AdminListReq) (total int, out []system.SystemAdminListOut, err error)
+		Query(input *auths.AdminListReq) *gdb.Model
+		Add(ctx context.Context, input *auths.AdminAddReq) (err error)
+		IsExitsUser(ctx context.Context, id uint, name string) (err error)
+		Edit(ctx context.Context, input *auths.AdminEditReq) (err error)
 		Login(ctx context.Context, input *auths.AdminLoginReq) (out *auths.AdminLoginRes, err error)
 		Logout(ctx context.Context) (err error)
 	}
@@ -25,14 +32,30 @@ type (
 		TreeList(ctx context.Context, req *auths.MenuTreeListReq) (out []system.MenuTreeListItem, err error)
 		TreeListItem(ctx context.Context, list []system.MenuTreeListItem) (out []system.MenuTreeListItem, err error)
 	}
-	IAuthsRoute interface{}
+	IAuthsRoute interface {
+		List(ctx context.Context, input *auths.RouteListReq) (total int, out []system.SystemRouteOut, err error)
+		Query(ctx context.Context, input *auths.RouteListReq) *gdb.Model
+		Add(ctx context.Context, req *auths.RouteAddReq) (err error)
+		Edit(ctx context.Context, input *auths.RouteEditReq) (err error)
+	}
 )
 
 var (
-	localAuthsAdmin IAuthsAdmin
 	localAuthsMenu  IAuthsMenu
 	localAuthsRoute IAuthsRoute
+	localAuthsAdmin IAuthsAdmin
 )
+
+func AuthsRoute() IAuthsRoute {
+	if localAuthsRoute == nil {
+		panic("implement not found for interface IAuthsRoute, forgot register?")
+	}
+	return localAuthsRoute
+}
+
+func RegisterAuthsRoute(i IAuthsRoute) {
+	localAuthsRoute = i
+}
 
 func AuthsAdmin() IAuthsAdmin {
 	if localAuthsAdmin == nil {
@@ -54,15 +77,4 @@ func AuthsMenu() IAuthsMenu {
 
 func RegisterAuthsMenu(i IAuthsMenu) {
 	localAuthsMenu = i
-}
-
-func AuthsRoute() IAuthsRoute {
-	if localAuthsRoute == nil {
-		panic("implement not found for interface IAuthsRoute, forgot register?")
-	}
-	return localAuthsRoute
-}
-
-func RegisterAuthsRoute(i IAuthsRoute) {
-	localAuthsRoute = i
 }

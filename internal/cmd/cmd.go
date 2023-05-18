@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"context"
+	"goframe/route"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcmd"
-	"goframe/route"
 )
 
 var (
@@ -14,6 +15,10 @@ var (
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
+
+			// s.Group("/backend", func(group *ghttp.RouterGroup) {
+			// 	group.Bind(backend.NewIndex().Index)
+			// })
 
 			// 加载路由
 			route.InitRoute(ctx, s)

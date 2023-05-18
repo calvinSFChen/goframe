@@ -2,8 +2,9 @@ package backend
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/net/ghttp"
 	"goframe/route/backend/system"
+
+	"github.com/gogf/gf/v2/net/ghttp"
 )
 
 func InitBackend(ctx context.Context, group *ghttp.RouterGroup) {

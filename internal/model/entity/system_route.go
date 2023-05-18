@@ -17,9 +17,9 @@ type SystemRoute struct {
 	Access     uint        `json:"access"     description:"子管理员是否可用"`
 	Path       string      `json:"path"       description:"路径"`
 	UniqueAuth string      `json:"uniqueAuth" description:"前台唯一标识"`
-	IsShow     uint        `json:"isShow"     description:"0关闭1开启"`
-	IsDel      int         `json:"isDel"      description:"是否删除"`
+	Status     uint        `json:"status"     description:"0关闭1开启"`
+	Sort       int         `json:"sort"       description:"排序"`
+	Operator   string      `json:"operator"   description:"操作人"`
 	CreatedAt  *gtime.Time `json:"createdAt"  description:"创建时间"`
 	UpdatedAt  *gtime.Time `json:"updatedAt"  description:"更新时间"`
-	Operator   string      `json:"operator"   description:"操作人"`
 }

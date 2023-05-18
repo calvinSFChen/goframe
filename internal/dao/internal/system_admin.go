@@ -22,9 +22,11 @@ type SystemAdminDao struct {
 type SystemAdminColumns struct {
 	Id         string // ID
 	Username   string // 后台管理员账号
+	Realname   string // 后台管理员姓名
+	Email      string // 邮箱
+	Phone      string // 手机号码
 	HeadPic    string // 管理员头像
 	Password   string // 后台管理员密码
-	RealName   string // 后台管理员姓名
 	Roles      string // 后台管理员权限
 	LastIp     string // 后台管理员最后一次登录ip
 	LastTime   string // 后台管理员最后一次登录时间
@@ -32,20 +34,21 @@ type SystemAdminColumns struct {
 	Level      string // 后台管理员级别
 	Status     string // 后台管理员状态 1有效0无效
 	DivisionId string // 事业部id
+	Operator   string // 操作人
 	IsDel      string // 是否删除
 	CreatedAt  string // 创建时间
 	UpdatedAt  string // 更新时间
-	Operator   string // 操作人
-	Phone      string // 手机号码
 }
 
 // systemAdminColumns holds the columns for table test_system_admin.
 var systemAdminColumns = SystemAdminColumns{
 	Id:         "id",
 	Username:   "username",
+	Realname:   "realname",
+	Email:      "email",
+	Phone:      "phone",
 	HeadPic:    "head_pic",
 	Password:   "password",
-	RealName:   "real_name",
 	Roles:      "roles",
 	LastIp:     "last_ip",
 	LastTime:   "last_time",
@@ -53,11 +56,10 @@ var systemAdminColumns = SystemAdminColumns{
 	Level:      "level",
 	Status:     "status",
 	DivisionId: "division_id",
+	Operator:   "operator",
 	IsDel:      "is_del",
 	CreatedAt:  "created_at",
 	UpdatedAt:  "updated_at",
-	Operator:   "operator",
-	Phone:      "phone",
 }
 
 // NewSystemAdminDao creates and returns a new DAO object for table data access.
