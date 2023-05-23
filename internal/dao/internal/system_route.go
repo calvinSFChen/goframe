@@ -20,34 +20,32 @@ type SystemRouteDao struct {
 
 // SystemRouteColumns defines and stores column names for table test_system_route.
 type SystemRouteColumns struct {
-	Id         string // 菜单ID
-	Pid        string // 父级id
-	Title      string // 名称
-	Methods    string // 提交方式POST GET PUT DELETE
-	Access     string // 子管理员是否可用
-	Path       string // 路径
-	UniqueAuth string // 前台唯一标识
-	Status     string // 0关闭1开启
-	Sort       string // 排序
-	Operator   string // 操作人
-	CreatedAt  string // 创建时间
-	UpdatedAt  string // 更新时间
+	Id        string // 菜单ID
+	Pid       string // 父级id
+	Title     string // 名称
+	Methods   string // 提交方式POST GET PUT DELETE
+	Access    string // 子管理员是否可用
+	ApiUrl    string // 接口地址
+	Status    string // 0关闭1开启
+	Sort      string // 排序
+	Operator  string // 操作人
+	CreatedAt string // 创建时间
+	UpdatedAt string // 更新时间
 }
 
 // systemRouteColumns holds the columns for table test_system_route.
 var systemRouteColumns = SystemRouteColumns{
-	Id:         "id",
-	Pid:        "pid",
-	Title:      "title",
-	Methods:    "methods",
-	Access:     "access",
-	Path:       "path",
-	UniqueAuth: "unique_auth",
-	Status:     "status",
-	Sort:       "sort",
-	Operator:   "operator",
-	CreatedAt:  "created_at",
-	UpdatedAt:  "updated_at",
+	Id:        "id",
+	Pid:       "pid",
+	Title:     "title",
+	Methods:   "methods",
+	Access:    "access",
+	ApiUrl:    "api_url",
+	Status:    "status",
+	Sort:      "sort",
+	Operator:  "operator",
+	CreatedAt: "created_at",
+	UpdatedAt: "updated_at",
 }
 
 // NewSystemRouteDao creates and returns a new DAO object for table data access.

@@ -24,10 +24,9 @@ type SystemAdmin struct {
 	LastTime   interface{} // 后台管理员最后一次登录时间
 	LoginCount interface{} // 登录次数
 	Level      interface{} // 后台管理员级别
-	Status     interface{} // 后台管理员状态 1有效0无效
+	Status     interface{} // 后台管理员状态 1有效0无效2禁用
 	DivisionId interface{} // 事业部id
 	Operator   interface{} // 操作人
-	IsDel      interface{} // 是否删除
 	CreatedAt  *gtime.Time // 创建时间
 	UpdatedAt  *gtime.Time // 更新时间
 }

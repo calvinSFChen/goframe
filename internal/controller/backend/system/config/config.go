@@ -1,30 +1,29 @@
-package system
+package config
 
-// import (
-// 	"context"
-// 	"goframe/api/v1/backend/setting/system"
-// 	"goframe/internal/model/setting"
-// 	"goframe/internal/service"
-// )
+import (
+	"context"
+	"goframe/api/v1/backend/system/config"
+	"goframe/internal/service"
+)
 
-// type cConfig struct {
-// }
+type cConfig struct {
+}
 
-// var NewConfig = &cConfig{}
+var NewConfig = &cConfig{}
 
-// // Add 添加系统配置管理
-// // @Summary 添加系统配置管理
-// // @Description 添加系统配置管理
-// // @Tags 设置管理
-// // @Accept application/json
-// // @Produce application/json
-// // @Param body body system.ConfigAddReq
-// // @Success 200 {object} response.ResponseRes={data=system.ConfigAddRes} "code错误码，msg操作信息，data返回信息"
-// // @route /backend/setting/system_config/add [post]
-// func (c *cConfig) Add(ctx context.Context, req *system.BasicConfigAddReq) (res *system.BasicConfigAddRes, err error) {
-// 	err = service.SystemConfig().Add(ctx, req)
-// 	return
-// }
+// Add 添加系统配置管理
+// @Summary 添加系统配置管理
+// @Description 添加系统配置管理
+// @Tags 设置管理
+// @Accept application/json
+// @Produce application/json
+// @Param body body system.ConfigAddReq
+// @Success 200 {object} response.ResponseRes={data=system.ConfigAddRes} "code错误码，msg操作信息，data返回信息"
+// @route /backend/setting/system_config/add [post]
+func (c *cConfig) Add(ctx context.Context, req *config.ConfigAddReq) (res *config.ConfigAddRes, err error) {
+	err = service.SystemConfig().Add(ctx, req)
+	return
+}
 
 // // List 系统配置列表
 // // @summary 系统配置列表
@@ -48,27 +47,27 @@ package system
 // 	return
 // }
 
-// // Edit 编辑系统配置
-// // @summary 编辑系统配置
-// // @description 编辑系统配置
-// // @tags 设置管理
-// // @accept application/json
-// // @produce application/json
-// // @param data query system.BasicConfigEditReq
-// // @success 200 {object} response.ResponseRes={data=system.BasicConfigEditRes} "code操作码 msg操作信息 data返回信息"
-// // @route /backend/setting/system_config/list [get]
-// func (c *cConfig) Edit(ctx context.Context, req *system.BasicConfigEditReq) (res *system.BasicConfigEditRes, err error) {
-// 	err = service.SystemConfig().Edit(ctx, req)
-// 	return
-// }
+// Edit 编辑系统配置
+// @summary 编辑系统配置
+// @description 编辑系统配置
+// @tags 设置管理
+// @accept application/json
+// @produce application/json
+// @param data query system.BasicConfigEditReq
+// @success 200 {object} response.ResponseRes={data=system.BasicConfigEditRes} "code操作码 msg操作信息 data返回信息"
+// @route /backend/setting/system_config/list [get]
+func (c *cConfig) Edit(ctx context.Context, req *config.ConfigEditReq) (res *config.ConfigEditRes, err error) {
+	err = service.SystemConfig().Edit(ctx, req)
+	return
+}
 
-// func (c *cConfig) GetOne(ctx context.Context, req *system.SystemConfigOenReq) (res *system.SystemConfigOneRes, err error) {
-// 	var (
-// 		id = req.Id
-// 	)
-// 	res, err = service.SystemConfig().GetOne(ctx, id)
-// 	if err != nil {
-// 		return
-// 	}
-// 	return
-// }
+func (c *cConfig) GetOne(ctx context.Context, req *config.ConfigOenReq) (res *config.ConfigOneRes, err error) {
+	var (
+		id = req.Id
+	)
+	res, err = service.SystemConfig().GetOne(ctx, id)
+	if err != nil {
+		return
+	}
+	return
+}

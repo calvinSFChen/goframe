@@ -15,13 +15,12 @@ type SystemMenus struct {
 	Icon       string      `json:"icon"       description:"图标"`
 	Title      string      `json:"title"      description:"名称"`
 	Sort       int         `json:"sort"       description:"排序"`
-	IsShow     uint        `json:"isShow"     description:"0隐藏1显示"`
-	Status     uint        `json:"status"     description:"0关闭1开启"`
+	IsShow     uint        `json:"isShow"     description:"是否为隐藏菜单0=隐藏菜单,1=显示菜单"`
 	Access     uint        `json:"access"     description:"子管理员是否可用"`
 	Path       string      `json:"path"       description:"路径"`
+	ApiUrl     string      `json:"apiUrl"     description:"接口地址"`
 	UniqueAuth string      `json:"uniqueAuth" description:"前台唯一标识"`
-	IsDel      int         `json:"isDel"      description:"是否删除"`
+	Operator   string      `json:"operator"   description:"操作人"`
 	CreatedAt  *gtime.Time `json:"createdAt"  description:"创建时间"`
 	UpdatedAt  *gtime.Time `json:"updatedAt"  description:"更新时间"`
-	Operator   string      `json:"operator"   description:"操作人"`
 }

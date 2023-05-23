@@ -2,11 +2,12 @@ package utils
 
 import (
 	"fmt"
-	"github.com/gogf/gf/v2/text/gstr"
-	"github.com/gogf/gf/v2/util/gconv"
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/gogf/gf/v2/text/gstr"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 // StructToStruct 使用反射，转换结构体
@@ -25,6 +26,10 @@ func StructToStruct(sourceStruct interface{}, targetStruct interface{}) {
 			continue
 		}
 		targetVal := targetV.Field(i)
+		fmt.Printf("targetVal.Type(): %+v; sourceVal.Type(): %+v\n", targetVal.Type(), sourceVal.Type())
+		if targetVal.Type() != sourceVal.Type() {
+			continue
+		}
 		targetVal.Set(sourceVal)
 	}
 }

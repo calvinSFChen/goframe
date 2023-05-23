@@ -15,7 +15,7 @@ type (
 	IRoute interface {
 		AddRoute(routes ...system.RouteItem)
 		InitModule(module string, isBool bool)
-		Middleware(group *ghttp.RouterGroup, isAuth bool, isReset bool)
+		InitRoute(group *ghttp.RouterGroup, isPrivate bool)
 	}
 )
 

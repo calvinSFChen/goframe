@@ -20,11 +20,9 @@ type AdminListReq struct {
 
 type AdminListRes struct {
 	g.Meta `mime:"application/json" tags:"系统管理员" example:"string"`
-	Total  int                  `json:"total" description:"总条数"`
+	Total  int                         `json:"total" description:"总条数"`
 	List   []system.SystemAdminListOut `json:"list" description:"列表数据"`
 }
-
-
 
 type AdminAddReq struct {
 	g.Meta   `path:"auths_admin/add"  tags:"系统管理员" method:"post" description:"添加系统管理员"`
@@ -59,11 +57,12 @@ type AdminLoginReq struct {
 }
 type AdminLoginRes struct {
 	g.Meta     `mime:"application/json" tags:"系统管理员" example:"string"`
-	Token      string                `json:"token" description:"token"`
-	ExpireTime string                `json:"expire_time" description:"过期时间"`
-	AdminInfo  entity.SystemAdmin    `json:"admin_info" description:"用户信息"`
-	Menus      []system.MenuListItem `json:"menus"`
-	UniqueAuth []string              `json:"unique_auth"`
+	Token      string                  `json:"token" description:"token"`
+	ExpireTime string                  `json:"expire_time" description:"过期时间"`
+	AdminInfo  entity.SystemAdmin      `json:"admin_info" description:"用户信息"`
+	Menus      []system.MenuListItem   `json:"menus"`
+	Routes     []system.SystemRouteOut `json:"routes"`
+	UniqueAuth []string                `json:"unique_auth"`
 }
 
 type AdminLogoutReq struct {

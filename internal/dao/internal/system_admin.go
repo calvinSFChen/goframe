@@ -32,10 +32,9 @@ type SystemAdminColumns struct {
 	LastTime   string // 后台管理员最后一次登录时间
 	LoginCount string // 登录次数
 	Level      string // 后台管理员级别
-	Status     string // 后台管理员状态 1有效0无效
+	Status     string // 后台管理员状态 1有效0无效2禁用
 	DivisionId string // 事业部id
 	Operator   string // 操作人
-	IsDel      string // 是否删除
 	CreatedAt  string // 创建时间
 	UpdatedAt  string // 更新时间
 }
@@ -57,7 +56,6 @@ var systemAdminColumns = SystemAdminColumns{
 	Status:     "status",
 	DivisionId: "division_id",
 	Operator:   "operator",
-	IsDel:      "is_del",
 	CreatedAt:  "created_at",
 	UpdatedAt:  "updated_at",
 }

@@ -8,6 +8,7 @@ package service
 import (
 	"context"
 	"goframe/api/v1/backend/system/auths"
+	"goframe/api/v1/backend/system/config"
 	"goframe/internal/model/system"
 
 	"github.com/gogf/gf/v2/database/gdb"
@@ -25,37 +26,34 @@ type (
 	}
 	IAuthsMenu interface {
 		List(ctx context.Context, input *auths.MenuListReq) (out auths.MenuListRes, err error)
-		GetMenuItem(ctx context.Context, list []system.MenuListItem) (res []system.MenuListItem)
+		GetMenuItem(ctx context.Context, list []system.MenuListItem, inIds []int) (res []system.MenuListItem)
 		Add(ctx context.Context, req *auths.MenuAddReq) (err error)
 		Edit(ctx context.Context, req *auths.MenuEditReq) (err error)
 		UniqueAuthList(ctx context.Context, input *auths.MenuUniqueAuthListReq) (out []string, err error)
 		TreeList(ctx context.Context, req *auths.MenuTreeListReq) (out []system.MenuTreeListItem, err error)
 		TreeListItem(ctx context.Context, list []system.MenuTreeListItem) (out []system.MenuTreeListItem, err error)
+		GetAuthMenus(ctx context.Context, id int) (out []system.MenuListItem, uniqueAuth []string, routeList []system.SystemRouteOut, err error)
 	}
 	IAuthsRoute interface {
 		List(ctx context.Context, input *auths.RouteListReq) (total int, out []system.SystemRouteOut, err error)
 		Query(ctx context.Context, input *auths.RouteListReq) *gdb.Model
 		Add(ctx context.Context, req *auths.RouteAddReq) (err error)
 		Edit(ctx context.Context, input *auths.RouteEditReq) (err error)
+		GetAuthRoutes(ctx context.Context, id int) (routeList []system.SystemRouteOut, err error)
+	}
+	ISystemConfig interface {
+		Add(ctx context.Context, input *config.ConfigAddReq) (err error)
+		Edit(ctx context.Context, input *config.ConfigEditReq) (err error)
+		GetOne(ctx context.Context, id uint64) (out *config.ConfigOneRes, err error)
 	}
 )
 
 var (
-	localAuthsMenu  IAuthsMenu
-	localAuthsRoute IAuthsRoute
-	localAuthsAdmin IAuthsAdmin
+	localAuthsAdmin   IAuthsAdmin
+	localAuthsMenu    IAuthsMenu
+	localAuthsRoute   IAuthsRoute
+	localSystemConfig ISystemConfig
 )
-
-func AuthsRoute() IAuthsRoute {
-	if localAuthsRoute == nil {
-		panic("implement not found for interface IAuthsRoute, forgot register?")
-	}
-	return localAuthsRoute
-}
-
-func RegisterAuthsRoute(i IAuthsRoute) {
-	localAuthsRoute = i
-}
 
 func AuthsAdmin() IAuthsAdmin {
 	if localAuthsAdmin == nil {
@@ -77,4 +75,26 @@ func AuthsMenu() IAuthsMenu {
 
 func RegisterAuthsMenu(i IAuthsMenu) {
 	localAuthsMenu = i
+}
+
+func AuthsRoute() IAuthsRoute {
+	if localAuthsRoute == nil {
+		panic("implement not found for interface IAuthsRoute, forgot register?")
+	}
+	return localAuthsRoute
+}
+
+func RegisterAuthsRoute(i IAuthsRoute) {
+	localAuthsRoute = i
+}
+
+func SystemConfig() ISystemConfig {
+	if localSystemConfig == nil {
+		panic("implement not found for interface ISystemConfig, forgot register?")
+	}
+	return localSystemConfig
+}
+
+func RegisterSystemConfig(i ISystemConfig) {
+	localSystemConfig = i
 }

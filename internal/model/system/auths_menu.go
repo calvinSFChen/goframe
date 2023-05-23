@@ -11,12 +11,17 @@ type MenuListItemEntity struct {
 	UniqueAuth string `json:"unique_auth"      description:"名称"`
 	Title      string `json:"title"      description:"名称"`
 	Icon       string `json:"icon"       description:"排序"`
-	Header     int    `json:"header"     description:"是否隐藏菜单 0隐藏 1显示"`
-	IsHeader   string `json:"is_header"       description:"路径"`
 }
 
 type MenuTreeListItem struct {
 	Label    string             `json:"label" description:"标题"`
 	Value    string             `json:"value" description:"值"`
 	Children []MenuTreeListItem `json:"children" description:"子项"`
+}
+
+
+type MenuEntity struct {
+	Id         int    `json:"id"       description:"ID"`
+	Path       string `json:"path"       description:"路径"`
+	ApiUrl string `json:"api_url"      description:"接口"`
 }

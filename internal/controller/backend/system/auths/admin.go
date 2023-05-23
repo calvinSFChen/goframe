@@ -83,19 +83,18 @@ func (c *cAdmin) Login(ctx context.Context, req *auths.AdminLoginReq) (res *auth
 		return
 	}
 
-	// listReq := &auths.MenuListReq{
-	// 	IsShow: 1,
-	// }
-
-	// res.Menus, err = service.authsMenu().List(ctx, listReq)
+	
+	// 获取权限菜单
+	res.Menus, res.UniqueAuth, res.Routes,  err = service.AuthsMenu().GetAuthMenus(ctx, int(res.AdminInfo.Id))
+	if err != nil {
+		return
+	}
+	
+	// 获取路由
+	// res.Routes, err = service.AuthsRoute().GetAuthRoutes(ctx, int(res.AdminInfo.Id))
 	// if err != nil {
 	// 	return
 	// }
-
-	// for _, v := range res.Menus {
-	// 	res.Uniqueauths = append(res.Uniqueauths, v.UniqueAuth)
-	// }
-	// res.UniqueAuth, err = service.authsMenu().GetAllUniquePath(ctx)
 	err = gerror.NewCode(cerrors.CodeSuccessNil, "登录成功")
 
 	return

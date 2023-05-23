@@ -24,6 +24,7 @@ type MenuAddReq struct {
 	Title      string `json:"title" v:"title@required   #名称不能为空" description:"名称"`
 	Pid        uint64 `json:"pid" description:"父类id"`
 	Path       string `json:"path" v:"path@required #路径不为空" description:"路径"`
+	ApiUrl     string `json:"api_url" v:"api_url@required #接口地址不能为空" description:"接口"`
 	UniqueAuth string `json:"unique_auth" v:"unique_auth@required #标识符不能空" description:"路径"`
 	Icon       string `json:"icon" description:"图标"`
 	Sort       int64  `json:"sort" v:"sort@required #排序不为空" description:"排序"`
@@ -36,15 +37,15 @@ type MenuAddRes struct {
 
 type MenuEditReq struct {
 	g.Meta     `path:"auths_menu/edit"  tags:"菜单管理" method:"post" description:"编辑菜单"`
-	Id        uint   `json:"id" v:"id@required   #缺少ID" description:"ID"`
+	Id         uint   `json:"id" v:"id@required   #缺少ID" description:"ID"`
 	Title      string `json:"title" v:"title@required   #名称不能为空" description:"名称"`
 	Pid        uint64 `json:"pid" description:"父类id"`
-	Path       string `json:"path" v:"path@required #路径不为空" description:"路径"`
+	Path       string `json:"path" v:"path@required #路径不能为空" description:"路径"`
+	ApiUrl     string `json:"api_url" v:"api_url@required #接口地址不能为空" description:"路径"`
 	UniqueAuth string `json:"unique_auth" v:"unique_auth@required #标识符不能空" description:"路径"`
 	Icon       string `json:"icon" description:"图标"`
 	Sort       int64  `json:"sort" v:"sort@required #排序不为空" description:"排序"`
 	IsShow     uint8  `json:"isShow" v:"isShow@required|in:0,1 #请选择是否隐藏|是否隐藏类型异常" description:"是否显示"`
-	Status     uint8  `json:"status" v:"status@required|in:0,1 #请选择状态|状态类型异常" description:"是否显示"`
 }
 type MenuEditRes struct {
 	g.Meta `mime:"application/json" tags:"菜单管理" example:"string"`

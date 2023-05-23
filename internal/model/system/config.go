@@ -14,7 +14,14 @@ type SystemConfigRes struct {
 	UpdatedAt *gtime.Time `json:"updatedAt" description:"更新时间"`
 }
 
-type BasicSetup struct {
-	Name string `json:"name" description:"名称"`
-	Type string `json:"type" description:"类型"`
+type BasicConfigOut struct {
+	SiteName        string `json:"site_name"  description:"网站名称"`
+	SiteUrl         string `json:"site_url"      description:"基础网站地址"`
+	SiteLogo        string `json:"site_logo"    description:"站点logo"`
+	SiteLogoSquare  string `json:"site_logo_square"   description:"后台小logo"`
+	LoginLogo       string `json:"login_logo" description:"登录logo"`
+	WapLoginLogo    string `json:"wap_login_logo" description:"移动端登录logo"`
+	RecordNo        string `json:"record_no" description:"备案"`
+	StatisticScript string `json:"statistic_script" description:"统计代码"`
+	IconPath        string `json:"icon_path" description:"icon图标"`
 }

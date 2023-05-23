@@ -1,26 +1,24 @@
 package system
 
-// import (
-// 	"context"
-// 	"encoding/json"
-// 	"fmt"
-// 	"github.com/gogf/gf/v2/errors/gerror"
-// 	"github.com/gogf/gf/v2/frame/g"
-// 	"github.com/gogf/gf/v2/i18n/gi18n"
-// 	"github.com/gogf/gf/v2/text/gstr"
-// 	"goframe/api/v1/backend/setting/system"
-// 	"goframe/internal/dao"
-// 	"goframe/internal/model/entity"
-// 	"goframe/internal/model/setting"
-// 	"goframe/utility/utils"
-// )
+import (
+	"context"
+	"encoding/json"
+	"goframe/api/v1/backend/system/config"
+	"goframe/internal/dao"
+	"goframe/internal/model/entity"
+	"goframe/utility/utils"
 
-// type sSystemConfig struct {
-// }
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/i18n/gi18n"
+	"github.com/gogf/gf/v2/text/gstr"
+)
 
-// func NewSystemConfig() *sSystemConfig {
-// 	return &sSystemConfig{}
-// }
+type sSystemConfig struct {
+}
+
+func NewSystemConfig() *sSystemConfig {
+	return &sSystemConfig{}
+}
 
 // func (s *sSystemConfig) List(ctx context.Context, input *system.BasicConfigListReq) (total int, out []setting.SystemConfigRes, err error) {
 // 	var (
@@ -63,121 +61,102 @@ package system
 // 	return
 // }
 
-// // Add 添加系统配置
-// func (s *sSystemConfig) Add(ctx context.Context, req *system.BasicConfigAddReq) (err error) {
-// 	var (
-// 		id           = req.Id
-// 		typeName     = gstr.Trim(req.TypeName)
-// 		name         = gstr.Trim(req.Name)
-// 		config       = gstr.Trim(req.Config)
-// 		systemConfig entity.MuSystemConfig
-// 	)
-// 	if id != 0 {
-// 		var n int
-// 		n, err = dao.MuSystemConfig.Ctx(ctx).Where("id=?", id).Count()
-// 		if err != nil {
-// 			err = gerror.New(gi18n.T(ctx, "数据查询异常"))
-// 			return
-// 		}
+// Add 添加系统配置
+func (s *sSystemConfig) Add(ctx context.Context, input *config.ConfigAddReq) (err error) {
+	var (
+		typed  = input.Type
+		name   = gstr.Trim(input.Name)
+		config = input.Config
 
-// 		if n != 0 {
-// 			err = gerror.New(gi18n.T(ctx, "ID已存在"))
-// 			return
-// 		}
+		systemConfig entity.SystemConfig
+	)
+	if !json.Valid([]byte(config)) {
+		err = gerror.New(utils.T(ctx, "配置参数须json结构异常"))
+		return
+	}
 
-// 		systemConfig.Id = uint(id)
-// 	}
-// 	systemConfig.TypeName = typeName
-// 	systemConfig.Name = name
-// 	systemConfig.Operator = "system"
-// 	if !json.Valid([]byte(config)) {
-// 		err = gerror.New(gi18n.T(ctx, "配置参数须json结构"))
-// 		return
-// 	}
-// 	systemConfig.Config = config
-// 	var lastId int64
-// 	_, err = dao.MuSystemConfig.Ctx(ctx).Data(systemConfig).InsertAndGetId()
-// 	if err != nil {
-// 		gerror.New(gi18n.T(ctx, "操作数据库异常"))
-// 		return
-// 	}
+	systemConfig.Config = config
+	systemConfig.Type = int(typed)
+	systemConfig.Name = name
+	systemConfig.Operator = utils.GetUserName()
 
-// 	if lastId <= 0 {
-// 		gerror.New(gi18n.T(ctx, "插入数据失败"))
-// 		return
-// 	}
-// 	return
-// }
+	var lastId int64
+	lastId, err = dao.SystemConfig.Ctx(ctx).Data(systemConfig).InsertAndGetId()
+	if err != nil {
+		gerror.New(gi18n.T(ctx, "操作数据库异常"))
+		return
+	}
 
-// // Edit 编辑系统配置
-// func (s *sSystemConfig) Edit(ctx context.Context, input *system.BasicConfigEditReq) (err error) {
-// 	var (
-// 		id           = input.Id
-// 		typeName     = gstr.Trim(input.TypeName)
-// 		name         = gstr.Trim(input.Name)
-// 		config       = gstr.Trim(input.Config)
-// 		systemConfig entity.MuSystemConfig
-// 	)
-// 	if id != 0 {
-// 		var n int
-// 		n, err = dao.MuSystemConfig.Ctx(ctx).Where("id=?", id).Count()
-// 		if err != nil {
-// 			err = gerror.New(gi18n.T(ctx, "数据查询异常"))
-// 			return
-// 		}
+	if lastId <= 0 {
+		gerror.New(utils.T(ctx, "操作失败"))
+		return
+	}
+	return
+}
 
-// 		if n != 0 {
-// 			err = gerror.New(gi18n.T(ctx, "ID已存在"))
-// 			return
-// 		}
+// Edit 编辑系统配置
+func (s *sSystemConfig) Edit(ctx context.Context, input *config.ConfigEditReq) (err error) {
+	var (
+		id     = input.Id
+		typed  = input.Type
+		name   = gstr.Trim(input.Name)
+		config = gstr.Trim(input.Config)
 
-// 		systemConfig.Id = uint(id)
-// 	}
-// 	systemConfig.TypeName = typeName
-// 	systemConfig.Name = name
-// 	systemConfig.Operator = "system"
-// 	if !json.Valid([]byte(config)) {
-// 		err = gerror.New(gi18n.T(ctx, "配置参数须json结构"))
-// 		return
-// 	}
-// 	systemConfig.Config = config
-// 	var lastId int64
-// 	_, err = dao.MuSystemConfig.Ctx(ctx).Data(systemConfig).InsertAndGetId()
-// 	if err != nil {
-// 		gerror.New(gi18n.T(ctx, "操作数据库异常"))
-// 		return
-// 	}
+		systemConfig entity.SystemConfig
+	)
 
-// 	if lastId <= 0 {
-// 		gerror.New(gi18n.T(ctx, "插入数据失败"))
-// 		return
-// 	}
-// 	return
-// }
+	if id <= 0 {
+		err = gerror.New(utils.T(ctx, "参数异常"))
+		return
+	}
 
-// func (s *sSystemConfig) GetOne(ctx context.Context, id uint64) (out *system.SystemConfigOneRes, err error) {
-// 	var (
-// 		systemConfig entity.MuSystemConfig
+	err = dao.SystemConfig.Ctx(ctx).Where("id=?", id).Scan(&systemConfig)
+	if err != nil {
+		err = gerror.New(utils.T(ctx, "操作数据库异常"))
+		return
+	}
 
-// 		config = system.SystemConfigItem1{}
-// 	)
-// 	if id <= 0 {
-// 		err = gerror.New(utils.T(ctx, "参数异常"))
-// 	}
-// 	fmt.Printf("id: %+v\n", id)
-// 	err = dao.MuSystemConfig.Ctx(ctx).Where("id = ?", id).Scan(&systemConfig)
-// 	if err != nil {
-// 		return
-// 	}
-// 	fmt.Println(2323)
+	systemConfig.Type = int(typed)
+	systemConfig.Name = name
+	systemConfig.Operator = "system"
+	if !json.Valid([]byte(config)) {
+		err = gerror.New(gi18n.T(ctx, "配置参数须json结构异常"))
+		return
+	}
+	systemConfig.Config = config
+	var affected int64
+	affected, err = dao.SystemConfig.Ctx(ctx).Data(systemConfig).Where("id", id).UpdateAndGetAffected(systemConfig)
+	if err != nil {
+		gerror.New(gi18n.T(ctx, "操作数据库异常"))
+		return
+	}
 
-// 	err = json.Unmarshal([]byte(systemConfig.Config), &config)
-// 	if err != nil {
-// 		return
-// 	}
-// 	out = &system.SystemConfigOneRes{
-// 		MuSystemConfig: systemConfig,
-// 		Config:         config,
-// 	}
-// 	return
-// }
+	if affected <= 0 {
+		gerror.New(gi18n.T(ctx, "操作失败"))
+		return
+	}
+	return
+}
+
+// GetOne 获取一条数据
+func (s *sSystemConfig) GetOne(ctx context.Context, id uint64) (out *config.ConfigOneRes, err error) {
+	var (
+		systemConfig entity.SystemConfig
+	)
+	out = &config.ConfigOneRes{}
+
+	if id <= 0 {
+		err = gerror.New(utils.T(ctx, "参数异常"))
+		return
+	}
+	err = dao.SystemConfig.Ctx(ctx).Where("id = ?", id).Scan(&systemConfig)
+	if err != nil {
+		return
+	}
+	utils.StructToStruct(systemConfig, out)
+	err = json.Unmarshal([]byte(systemConfig.Config), &out.Config)
+	if err != nil {
+		return
+	}
+	return
+}

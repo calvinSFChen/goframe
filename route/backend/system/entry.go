@@ -14,9 +14,9 @@ func InitRoute(ctx context.Context, group *ghttp.RouterGroup) {
 	// setting路由
 	group.Group("/system", func(group *ghttp.RouterGroup) {
 		// 加载公共路由
-		service.Route().Middleware(group, false, false)
+		service.Route().InitRoute(group, false)
 		group.Middleware(service.Middleware().Auth)
 		//加载路由
-		service.Route().Middleware(group, true, true)
+		service.Route().InitRoute(group, true)
 	})
 }

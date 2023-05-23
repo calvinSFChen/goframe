@@ -25,15 +25,14 @@ type SystemMenusColumns struct {
 	Icon       string // 图标
 	Title      string // 名称
 	Sort       string // 排序
-	IsShow     string // 0隐藏1显示
-	Status     string // 0关闭1开启
+	IsShow     string // 是否为隐藏菜单0=隐藏菜单,1=显示菜单
 	Access     string // 子管理员是否可用
 	Path       string // 路径
+	ApiUrl     string // 接口地址
 	UniqueAuth string // 前台唯一标识
-	IsDel      string // 是否删除
+	Operator   string // 操作人
 	CreatedAt  string // 创建时间
 	UpdatedAt  string // 更新时间
-	Operator   string // 操作人
 }
 
 // systemMenusColumns holds the columns for table test_system_menus.
@@ -44,14 +43,13 @@ var systemMenusColumns = SystemMenusColumns{
 	Title:      "title",
 	Sort:       "sort",
 	IsShow:     "is_show",
-	Status:     "status",
 	Access:     "access",
 	Path:       "path",
+	ApiUrl:     "api_url",
 	UniqueAuth: "unique_auth",
-	IsDel:      "is_del",
+	Operator:   "operator",
 	CreatedAt:  "created_at",
 	UpdatedAt:  "updated_at",
-	Operator:   "operator",
 }
 
 // NewSystemMenusDao creates and returns a new DAO object for table data access.

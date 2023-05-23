@@ -9,6 +9,7 @@ import (
 	"goframe/internal/dao"
 	"goframe/internal/model/entity"
 	"goframe/internal/model/system"
+	"goframe/internal/service"
 	"goframe/utility/utils"
 
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -50,17 +51,37 @@ func (s *sAuthsMenu) List(ctx context.Context, input *auths.MenuListReq) (out au
 	if err = model.Offset((page - 1) * size).Limit(size).Order("sort desc").Scan(&list); err != nil {
 		return
 	}
-	out.List = s.GetMenuItem(ctx, list)
+	out.List = s.GetMenuItem(ctx, list, []int{})
 	out.Total = total
 	return
 }
 
-func (s *sAuthsMenu) GetMenuItem(ctx context.Context, list []system.MenuListItem) (res []system.MenuListItem) {
+func (s *sAuthsMenu) GetMenuItem(ctx context.Context, list []system.MenuListItem, inIds []int) (res []system.MenuListItem) {
 	for _, v := range list {
-		dao.SystemMenus.Ctx(ctx).Where("is_show=?", 1).Where("pid=?", v.Id).Order("sort desc").Scan(&v.Children)
+		model := dao.SystemMenus.Ctx(ctx).Where("is_show=?", 1).Where("pid=?", v.Id)
+		model.Order("sort desc").Scan(&v.Children)
+		if len(v.Children) > 0 && len(inIds) > 0 {
+			var tmp = system.MenuListItem{}
+			for _, v2 := range v.Children {
+				var flag bool
+				for _, id := range inIds {
+					if v2.Id == id {
+						flag = true
+						break
+					}
+				}
+				if flag {
+					tmp.Children = append(tmp.Children, v2)
+				}
+			}
+
+			if len(tmp.Children) > 0 {
+				v.Children = tmp.Children
+			}
+		}
 		res = append(res, v)
 		if len(v.Children) > 0 {
-			s.GetMenuItem(ctx, v.Children)
+			s.GetMenuItem(ctx, v.Children, inIds)
 		}
 	}
 	return
@@ -72,11 +93,11 @@ func (s *sAuthsMenu) Add(ctx context.Context, req *auths.MenuAddReq) (err error)
 		title      = gstr.Trim(req.Title)
 		pid        = req.Pid
 		path       = gstr.Trim(req.Path)
+		apiUrl     = gstr.Trim(req.ApiUrl)
 		uniqueAuth = gstr.Trim(req.UniqueAuth)
 		icon       = gstr.Trim(req.Icon)
 		sort       = req.Sort
 		isShow     = req.IsShow
-		status     = req.Status
 
 		systemMenu entity.SystemMenus
 		lastId     int64
@@ -103,10 +124,10 @@ func (s *sAuthsMenu) Add(ctx context.Context, req *auths.MenuAddReq) (err error)
 	systemMenu.Title = title
 	systemMenu.Pid = uint(pid)
 	systemMenu.Path = path
+	systemMenu.ApiUrl = apiUrl
 	systemMenu.UniqueAuth = uniqueAuth
 	systemMenu.Sort = int(sort)
 	systemMenu.IsShow = uint(isShow)
-	systemMenu.Status = uint(status)
 	systemMenu.Operator = utils.GetUserName()
 	lastId, err = dao.SystemMenus.Ctx(ctx).Data(systemMenu).InsertAndGetId()
 	if err != nil {
@@ -126,12 +147,11 @@ func (s *sAuthsMenu) Edit(ctx context.Context, req *auths.MenuEditReq) (err erro
 		title      = gstr.Trim(req.Title)
 		pid        = req.Pid
 		path       = gstr.Trim(req.Path)
+		apiUrl     = gstr.Trim(req.ApiUrl)
 		uniqueAuth = gstr.Trim(req.UniqueAuth)
 		icon       = gstr.Trim(req.Icon)
 		sort       = req.Sort
 		isShow     = req.IsShow
-		status     = req.Status
-
 		systemMenu entity.SystemMenus
 	)
 
@@ -166,10 +186,10 @@ func (s *sAuthsMenu) Edit(ctx context.Context, req *auths.MenuEditReq) (err erro
 	systemMenu.Title = title
 	systemMenu.Pid = uint(pid)
 	systemMenu.Path = path
+	systemMenu.ApiUrl = apiUrl
 	systemMenu.UniqueAuth = uniqueAuth
 	systemMenu.Sort = int(sort)
 	systemMenu.IsShow = uint(isShow)
-	systemMenu.Status = uint(status)
 	systemMenu.Operator = utils.GetUserName()
 
 	var result sql.Result
@@ -202,7 +222,7 @@ func (s *sAuthsMenu) UniqueAuthList(ctx context.Context, input *auths.MenuUnique
 
 // TreeList 树状列表数据
 func (s *sAuthsMenu) TreeList(ctx context.Context, req *auths.MenuTreeListReq) (out []system.MenuTreeListItem, err error) {
-	err = dao.SystemMenus.Ctx(ctx).Fields("id as value, title as label").Where("pid=?", 0).Where("is_del=?", 0).Scan(&out)
+	err = dao.SystemMenus.Ctx(ctx).Fields("id as value, title as label").Where("pid=?", 0).Scan(&out)
 	if err != nil {
 		return
 	}
@@ -221,5 +241,46 @@ func (s *sAuthsMenu) TreeListItem(ctx context.Context, list []system.MenuTreeLis
 			s.TreeListItem(ctx, v.Children)
 		}
 	}
+	return
+}
+
+func (s *sAuthsMenu) GetAuthMenus(ctx context.Context, id int) (out []system.MenuListItem, uniqueAuth []string, routeList []system.SystemRouteOut, err error) {
+	var (
+		apiList []entity.SystemMenus
+	)
+
+	routeList, err = service.AuthsRoute().GetAuthRoutes(ctx, id)
+	if err != nil {
+		return
+	}
+
+	err = dao.SystemMenus.Ctx(ctx).Where("unique_auth!=?", "").Scan(&apiList)
+	if err != nil {
+		return
+	}
+
+	var (
+		menuIds []int
+	)
+	for _, v := range apiList {
+		var flag bool = true
+		for _, item := range routeList {
+			if v.ApiUrl == item.ApiUrl {
+				flag = true
+			}
+		}
+
+		if flag {
+			menuIds = append(menuIds, int(v.Id))
+			uniqueAuth = append(uniqueAuth, v.UniqueAuth)
+		}
+	}
+
+	// 组装前端数据
+	err = dao.SystemMenus.Ctx(ctx).WhereIn("id", menuIds).Where("pid=?", 0).Scan(&out)
+	if err != nil {
+		return
+	}
+	out = s.GetMenuItem(ctx, out, menuIds)
 	return
 }

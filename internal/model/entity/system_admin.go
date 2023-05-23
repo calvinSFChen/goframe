@@ -22,10 +22,9 @@ type SystemAdmin struct {
 	LastTime   uint        `json:"lastTime"   description:"后台管理员最后一次登录时间"`
 	LoginCount uint        `json:"loginCount" description:"登录次数"`
 	Level      uint        `json:"level"      description:"后台管理员级别"`
-	Status     uint        `json:"status"     description:"后台管理员状态 1有效0无效"`
+	Status     uint        `json:"status"     description:"后台管理员状态 1有效0无效2禁用"`
 	DivisionId int         `json:"divisionId" description:"事业部id"`
 	Operator   string      `json:"operator"   description:"操作人"`
-	IsDel      uint        `json:"isDel"      description:"是否删除"`
 	CreatedAt  *gtime.Time `json:"createdAt"  description:"创建时间"`
 	UpdatedAt  *gtime.Time `json:"updatedAt"  description:"更新时间"`
 }

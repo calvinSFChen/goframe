@@ -17,13 +17,12 @@ type SystemMenus struct {
 	Icon       interface{} // 图标
 	Title      interface{} // 名称
 	Sort       interface{} // 排序
-	IsShow     interface{} // 0隐藏1显示
-	Status     interface{} // 0关闭1开启
+	IsShow     interface{} // 是否为隐藏菜单0=隐藏菜单,1=显示菜单
 	Access     interface{} // 子管理员是否可用
 	Path       interface{} // 路径
+	ApiUrl     interface{} // 接口地址
 	UniqueAuth interface{} // 前台唯一标识
-	IsDel      interface{} // 是否删除
+	Operator   interface{} // 操作人
 	CreatedAt  *gtime.Time // 创建时间
 	UpdatedAt  *gtime.Time // 更新时间
-	Operator   interface{} // 操作人
 }

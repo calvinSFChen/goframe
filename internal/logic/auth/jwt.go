@@ -8,8 +8,9 @@ import (
 
 	// "github.com/gogf/gf/v2/errors/gcode"
 	"goframe/api/v1/backend/system/auths"
+	"goframe/internal/consts"
 	"goframe/internal/dao"
-	"goframe/internal/model/entity"
+	"goframe/internal/model/system"
 	"goframe/utility/cerrors"
 	"goframe/utility/response"
 	"goframe/utility/utils"
@@ -51,7 +52,7 @@ func init() {
 		// 	token过期后，可凭借旧token获取新token的刷新时间
 		MaxRefresh: time.Minute * 24 * 5,
 		// 身份验证的key值
-		IdentityKey: "id",
+		IdentityKey: consts.IdentityId,
 		//token检索模式，用于提取token-> Authorization
 		TokenLookup: "header: Authorization, query: token, cookie: jwt",
 		// token在请求头时的名称，默认值为Bearer.客户端在header中传入"Authorization":"token xxxxxx"
@@ -69,7 +70,6 @@ func init() {
 
 // PayloadFunc 向web添加额外的有效负载数据。
 func PayloadFunc(data interface{}) jwt.MapClaims {
-	fmt.Printf("PayloadFunc:  %+v\n", data)
 	claims := jwt.MapClaims{}
 	params := data.(map[string]interface{})
 	if len(params) > 0 {
@@ -83,8 +83,6 @@ func PayloadFunc(data interface{}) jwt.MapClaims {
 // IdentityHandler 标识
 func IdentityHandler(ctx context.Context) interface{} {
 	claims := jwt.ExtractClaims(ctx)
-	fmt.Printf("IdentityHandler: %+v\n", claims)
-
 	return claims[AuthsService.AuthJwt.IdentityKey]
 }
 
@@ -93,8 +91,6 @@ func LoginUnauthorized(ctx context.Context, code int, message string) {
 	var (
 		codes gcode.Code
 	)
-	fmt.Printf("LoginUnauthorized: %+v\n", code)
-
 	r := g.RequestFromCtx(ctx)
 	url := r.Router.Uri
 	if url == "/backend/system/auths_admin/login" {
@@ -109,12 +105,11 @@ func LoginUnauthorized(ctx context.Context, code int, message string) {
 
 // LoginAuthenticator 登录验证
 func LoginAuthenticator(ctx context.Context) (interface{}, error) {
-	fmt.Println("登录验证")
 	var (
 		r     = g.RequestFromCtx(ctx)
 		input auths.AdminLoginReq
 
-		systemAdmin entity.SystemAdmin
+		systemAdmin system.SystemAdmin
 	)
 	err := r.Parse(&input)
 	if err != nil {
@@ -122,8 +117,8 @@ func LoginAuthenticator(ctx context.Context) (interface{}, error) {
 	}
 
 	password := gstr.Trim(input.Password)
-	// p, _ := utils.Encryption(password)
-	// fmt.Printf("密码加密： %v\n", p)
+	fmt.Printf("OldPassword: %v; input: %+v\n", utils.Encryption(password), input)
+
 	err = dao.SystemAdmin.Ctx(ctx).
 		WhereOr("username=?", input.Username).
 		WhereOr("email=?", input.Username).
@@ -131,10 +126,9 @@ func LoginAuthenticator(ctx context.Context) (interface{}, error) {
 	if err != nil {
 		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
 	}
-	fmt.Printf("OldPassword: %v; input: %+v\n", utils.Encryption(password), input)
 	if !utils.EncryptionVerify(systemAdmin.Password, password) {
 		return nil, gerror.NewCode(cerrors.CodeExpire, utils.T(ctx, "账号或密码有误"))
 	}
-
+	systemAdmin.IdentityId = systemAdmin.Id
 	return utils.StructToMap(systemAdmin), nil
 }

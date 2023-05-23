@@ -10,16 +10,15 @@ import (
 
 // SystemRoute is the golang structure for table system_route.
 type SystemRoute struct {
-	Id         uint        `json:"id"         description:"菜单ID"`
-	Pid        uint        `json:"pid"        description:"父级id"`
-	Title      string      `json:"title"      description:"名称"`
-	Methods    string      `json:"methods"    description:"提交方式POST GET PUT DELETE"`
-	Access     uint        `json:"access"     description:"子管理员是否可用"`
-	Path       string      `json:"path"       description:"路径"`
-	UniqueAuth string      `json:"uniqueAuth" description:"前台唯一标识"`
-	Status     uint        `json:"status"     description:"0关闭1开启"`
-	Sort       int         `json:"sort"       description:"排序"`
-	Operator   string      `json:"operator"   description:"操作人"`
-	CreatedAt  *gtime.Time `json:"createdAt"  description:"创建时间"`
-	UpdatedAt  *gtime.Time `json:"updatedAt"  description:"更新时间"`
+	Id        uint        `json:"id"        description:"菜单ID"`
+	Pid       uint        `json:"pid"       description:"父级id"`
+	Title     string      `json:"title"     description:"名称"`
+	Methods   string      `json:"methods"   description:"提交方式POST GET PUT DELETE"`
+	Access    uint        `json:"access"    description:"子管理员是否可用"`
+	ApiUrl    string      `json:"apiUrl"    description:"接口地址"`
+	Status    uint        `json:"status"    description:"0关闭1开启"`
+	Sort      int         `json:"sort"      description:"排序"`
+	Operator  string      `json:"operator"  description:"操作人"`
+	CreatedAt *gtime.Time `json:"createdAt" description:"创建时间"`
+	UpdatedAt *gtime.Time `json:"updatedAt" description:"更新时间"`
 }
